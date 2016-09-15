@@ -1,0 +1,42 @@
+<h1 class='BNTO'>Register</h1>
+<br />
+<div ng-hide='currentUser'>
+	<p>Please fill in the form below to register an account. You may only have one Overmatch account per person, regardless of how many BattleNet accounts you may own.</p>
+	<br />
+	<div class='row'>
+		<div class='col-md-4'></div>
+		<div class='col-md-4'>
+			<form ng-submit='register()'>
+				<div class='form-group'>
+					<label for='email' class='BNT' style='font-size:14pt;font-weight:normal'>Email address</label>
+					<input type='email' class='form-control' id='email' placeholder='Email' ng-model='register.email' required>
+			  	</div>
+				<div class='form-group'>
+					<label for='password' class='BNT' style='font-size:14pt;font-weight:normal'>Password</label>
+					<input type='password' class='form-control' id='password' placeholder='Password' ng-model='register.password' required>
+				</div>
+				<div class='form-group'>
+					<label for='battletagname' class='BNT' style='font-size:14pt;font-weight:normal'>Battletag Name *</label>
+					<input type='text' class='form-control' id='battletagname' placeholder='Battletag Name' ng-model='register.battletag.name' ng-pattern='/^[a-zA-Z0-9]+$/' required>
+				</div>
+				<div class='form-group'>
+					<label for='battletagnumber' class='BNT' style='font-size:14pt;font-weight:normal'>Battletag Number *</label>
+					<input type='text' class='form-control' id='battletagnumber' placeholder='Battletag Number' ng-model='register.battletag.number' ng-pattern='/^[0-9]+$/' required>
+				</div>
+				<button type='submit' class='btn btn-primary btn-block BNT skew' style='font-size:14pt' ng-hide='registering'>
+					<span class='unskew'>Register</span>
+				</button>
+				<button type='button' class='btn btn-default btn-block' disabled='disabled' ng-show='registering'>
+					<img src='images/ajax-loader.gif' />
+				</button>
+			</form>
+		</div>
+		<div class='col-md-4'></div>
+	</div>
+	<br />
+	<br />
+	<p><small>* Battletag's will be automatically synced to an Overmatch account using Blizzard's OAuth API.</small></p>
+</div>
+<div ng-show='currentUser'>
+	<p>You are already logged into an Overmatch account. Remember that you may only have one Overmatch account per person, regardless of how many BattleNet accounts you may own.</p>
+</div>

@@ -1,0 +1,76 @@
+<nav class='navbar navbar-inverse navbar-fixed-top' role='navigation'>
+	<div class='container'>
+		<div class='navbar-header pull-left'>
+	        <a class='navbar-brand BNTO' style='font-size:1.8em' ui-sref='.home' data-toggle='collapse' data-target='.navbar-collapse.in'>
+        		<image src='/images/overmatch-symbol.png' class='pull-left' style='height:45px;margin-top:-12px;margin-right:10px'></image>
+        		<span class='hidden-xs'>Overmatch</span>
+	        </a>
+	    </div>
+	    <div class='navbar-header pull-right'>
+	    	<ul class='nav pull-left' ng-hide='currentUser' style='margin-right:10px'>
+		    	<li class='dropdown' uib-dropdown auto-close='outsideClick' is-open='loginOpen'>
+		    		<button class='btn navbar-btn skew' ng-class='connected ? "btn-primary" : "btn-warning"' style='padding-top:1px;padding-bottom:1px' padding uib-dropdown-toggle><span class='BNTO unskew' style='font-size:1.6em'>Login / Register <span class='caret'></span></span></button>
+		    		<div class='dropdown-menu dropdown-menu-right dropdown-menu-login' uib-dropdown-menu style='padding: 17px'>
+		    			<form ng-submit='navLogin()'>
+		    				<div class='form-group'>
+			    				<input type='email' class='form-control' placeholder='Email' ng-model='userLogin.email'>
+		    				</div>
+		    				<div class='form-group'>
+			    				<input type='password' class='form-control' placeholder='Password' ng-model='userLogin.password'>
+			    			</div>
+			    			<div class='form-group text-center'>
+			    				<small>
+									<a ui-sref='.lostpassword' ng-click='loginOpen = false'>Forgotten password?</a>
+								</small>
+			    			</div>
+			    			<div>
+			    				<button type='submit' class='btn btn-primary btn-block BNT skew' style='font-size:1.4em;padding-top:3px;padding-bottom:3px' ng-hide='loggingIn'>
+			    					<span class='unskew'>Login</span>
+								</button>
+			    				<button type='button' class='btn btn-default btn-block skew' ng-show='loggingIn' disabled>
+			    					<img class='unskew' ng-src='images/ajax-loader.gif'>
+								</button>
+								<a ui-sref='register' class='btn btn-info btn-block BNT skew' style='font-size:1.4em;padding-top:3px;padding-bottom:3px' ng-click='loginOpen = false'>
+			    					<span class='unskew'>Register</span>
+								</a>
+							</div>
+		    			</form>
+		    		</div>
+		    	</li>
+		    </ul>
+		    <ul class='nav pull-left' is-auth ng-show='currentUser' style='margin-right:10px'>
+		    	<!-- <li>
+		    		<p class='navbar-btn'>
+			    		<a ui-sref='.skirmish' class='btn btn-info btn-margin-left BNTO skew' style='padding-top:1px;padding-bottom:1px;font-size:16pt' role='button'>
+			    			<span class='unskew'><span class='glyphicon glyphicon-tower' style='font-size:12pt'></span> Skirmish</span>
+			    		</a>
+		    		</p>
+		    	</li> -->
+		    	<li class='dropdown pull-right' uib-dropdown>
+			    	<button type='button' class='btn navbar-btn btn-margin-left skew' ng-class='connected ? "btn-primary" : "btn-warning"' style='padding-top:1px;padding-bottom:1px' uib-dropdown-toggle>
+			    		<span class='unskew'><span class='glyphicon glyphicon-user' style='font-size:1.2em'></span> <span class='BNTO' style='font-size:1.6em'>{{currentUser.profile.battletag.name}}<small>#{{currentUser.profile.battletag.number}}</small> <span class='caret'></span></span></span>
+			    	</button>
+			    	<ul class='dropdown-menu dropdown-menu-right BNT' uib-dropdown-menu>
+				    	<li><a ui-sref='user'><span class='glyphicon glyphicon-user' style='font-size:1.2em'></span> <span style='font-size:1.2em'>Profile</span></a></li>
+				    	<li><a ui-sref='settings'><span class='glyphicon glyphicon-cog' style='font-size:1.2em'></span> <span style='font-size:1.2em'>Settings</span></a></li>
+				    	<li><a ui-sref='friends'><span class='glyphicon glyphicon-heart' style='font-size:1.2em'></span> <span style='font-size:1.2em'>Friends</span></a></li>
+				    	<li><a class='clickable' ng-click='navLogout()'><span class='glyphicon glyphicon-log-out' style='font-size:1.2em'></span> <span style='font-size:1.2em'>Logout</span></a></li>
+			    	</ul>
+		    	</li>
+		    </ul>
+		    <button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='.navbar-collapse' aria-expanded='false'>
+				<span class='sr-only'>Toggle navigation</span>
+				<span class='icon-bar'></span>
+				<span class='icon-bar'></span>
+				<span class='icon-bar'></span>
+			</button>
+		</div>
+		<div class='visible-xs-block clearfix'></div>
+		<div class='collapse navbar-collapse'>
+	    	<ul class='nav navbar-nav' data-toggle='collapse' data-target='.navbar-collapse.in'>
+	    		<li ng-class='$state.current.name === "skirmish" || $state.current.name === "skirmish.scrims" ? "active" : ""'><a ui-sref='skirmish' class='BNTO' style='font-size:1.3em'>Skirmish</a></li>
+	    		<li><a ui-sref='contact' class='BNTO' style='font-size:1.3em'>Contact</a></li>
+	    	</ul>
+		</div>
+	</div>
+</nav>

@@ -1,0 +1,97 @@
+<div class='panel panel-default'>
+	<div class='panel-heading BNTO' style='font-size:1.5em'>Party</div>
+	<div class='panel-body'>
+		<span ng-repeat='member in testParty._members'>{{member.profile.battletag.full}}</span>
+		<div class='row unbox' ng-show='!party._id'>
+			<div class='col-xs-1 unbox'></div>
+			<div class='col-md-12 col-xs-10 unbox'>
+				<div class='row unbox'>
+					<user-avatar class='col-xs-2' user='CurrentUser' my-party='true'></user-avatar>
+					<empty-avatar class='col-xs-2' ng-repeat='index in range(5) track by $index'></empty-avatar>
+				</div>
+			</div>
+		</div>
+		<div class='row unbox' ng-show='party._id'>
+			<div class='col-xs-1 unbox'></div>
+			<div class='col-md-12 col-xs-10 unbox'>
+				<div class='row unbox'>
+					<user-avatar class='col-xs-2' ng-repeat='user in party._members' user='user' party='party' my-party='true'></user-avatar>
+					<empty-avatar class='col-xs-2' ng-repeat='index in range(6-party.members.length) track by $index'></empty-avatar>
+				</div>
+			</div>
+		</div>
+		<form ng-show='party._id && party.members.length >= 1' ng-submit='sendChatMessage()'>
+			<div class='BNTO' style='font-size:1.25em'>Party Chat:</div>
+			<div class='thumbnail'>
+				<div style='font-size:0.9em;height:300px;overflow-y:scroll;margin-bottom:3px' scroll-glue>
+					<div ng-repeat='chatMessage in party._chat' style='margin-bottom:2px;word-wrap: break-word'>
+						<strong ng-show='chatMessage.from'><span class='glyphicon glyphicon-star' style='color:red;margin-right:2px' ng-show='chatMessage.leader'></span>{{chatMessage.from}}: </strong><span ng-class='!chatMessage.from ? "text-primary italic" : ""'>{{chatMessage.message}}</span>
+					</div>
+				</div>
+				<div class='input-group'>
+					<textarea class='form-control' placeholder='Send a message (250 characters max)' rows='2' style='resize:none;font-size:0.9em' maxlength='250' ng-model='partyChatMessage' ng-enter='sendChatMessage()'></textarea>
+					<span class='input-group-addon btn btn-default BNTO' style='font-size:1.1em' ng-click='sendChatMessage()'>Send</span>
+				</div>
+			</div>
+		</form>
+		<div class='row unbox' ng-show='invitedParties.length > 0'>
+			<div class='BNTO' style='font-size:1.25em'>Pending Invites:</div>
+			<div class='row unbox' ng-repeat='invitedParty in invitedParties'>
+				<div class='col-xs-1 unbox'></div>
+				<div class='col-md-12 col-xs-10 unbox'>
+					<div class='row unbox'>
+						<div class='col-xs-9 unbox'>
+							<user-avatar class='col-xs-2' ng-repeat='user in invitedParty._members' user='user' party='invitedParty'></user-avatar>
+							<empty-avatar class='col-xs-2' ng-repeat='index in range(6-invitedParty.members.length) track by $index'></empty-avatar>
+						</div>
+						<div class='col-xs-3 unbox'>
+							<span class='col-xs-6 btn btn-sm btn-danger btn-invites' ng-click='rejectInvite(invitedParty._id)'><span class='glyphicon glyphicon-remove btn-invite-glyphicon'></span></span>
+							<span class='col-xs-6 btn btn-sm btn-success btn-invites' ng-click='acceptInvite(invitedParty._id)'><span class='glyphicon glyphicon-ok btn-invite-glyphicon'></span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class='row unbox' ng-show='party._id && party.invites.length > 0'>
+			<div class='BNTO' style='font-size:1.25em'>Sent Invites:</div>
+			<div class='row unbox'>
+				<div class='col-xs-1 unbox'></div>
+				<div class='col-md-12 col-xs-10 unbox'>
+					<div class='row unbox'>
+						<user-avatar class='col-xs-2' ng-repeat='user in party._invites' user='user' party='party' my-party='true'></user-avatar>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class='row unbox' ng-show='party._id && party.suggestedInvites.length > 0'>
+			<div class='BNTO' style='font-size:1.25em'>Suggested Invites:</div>
+			<div class='row unbox'>
+				<div class='col-xs-1 unbox'></div>
+				<div class='col-md-12 col-xs-10 unbox'>
+					<div class='row unbox'>
+						<user-avatar class='col-xs-2' ng-repeat='user in party._suggestedInvites' user='user' party='party' my-party='true'></user-avatar>
+					</div>
+				</div>
+			</div>
+		</div>
+		<form ng-submit='inviteUserByBattletag()'>
+			<div class='input-group' style='margin-top:10px'>
+				<input type='text' class='form-control' ng-model='partyInvite.userBattletag' placeholder='Battletag' autocorrect='off' spellcheck='false'
+					uib-popover='{{partyInvite.tooltipError}}'
+					popover-is-open='partyInvite.tooltipDisplay'
+					popover-trigger='none'
+					popover-placement='top'
+				/>
+				<span class='input-group-btn'>
+					<button type='submit' class='btn btn-success' ng-disabled='partyInvite.inviting'>
+						<span class='glyphicon glyphicon-plus' style='font-size:8pt' ng-hide='partyInvite.inviting'></span>
+						<span class='glyphicon glyphicon-hourglass' style='font-size:8pt' ng-show='partyInvite.inviting'></span>
+					</button>
+				</span>
+			</div>
+		</form>
+		<div class='row unbox' ng-show='false'>
+			<div class='BNTO' style='font-size:1.25em'>Available Friends:</div>
+		</div>
+	</div>
+</div>

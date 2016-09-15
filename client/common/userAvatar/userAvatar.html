@@ -1,0 +1,30 @@
+<div class='thumbnail clickable' uib-dropdown is-open='dropdown.open' on-toggle='toggle()' ng-mouseenter='mouseEnterFnc()' ng-mouseleave='mouseLeaveFnc()' ng-click='mouseClickFnc()' ng-style='(myParty && user._id === currentUser._id) ? {"background-color": "#5cb85c"} : ""' uib-dropdown-toggle>
+	<div> <!-- uib-dropdown-toggle -->
+		<image ng-src='/images/icons/78 - GYY5khe.png' class='img-responsive img-rounded' />
+		<image src='/images/redstar.png' style='width:20%;height:20%;position:absolute;right:4px;bottom:4px' ng-show='party && user._id === party.leader.id' />
+	</div>
+	<ul class='uib-dropdown-menu' ng-class='dropDown ? "drop-down" : "drop-up"'>
+		<li><span class='glyphicon glyphicon-stop' style='color:#5cb85c' ng-show='user._presence.state === "online"'></span> <span class='BNT' style='font-size:1.2em;color:black'>{{user.profile.battletag.full}}</span></li>
+		<li class='clickable' ng-show='dropdown.full'>
+			<a>View Profile</a>
+		</li>
+		<li class='clickable' ng-show='dropdown.full && myParty && party && party.leader.id === currentUser._id && user._id !== currentUser._id && isMember(user._id)'>
+			<a ng-click='promoteToLeader(user._id)'>Promote to Leader</a>
+		</li>
+		<li class='clickable' ng-show='dropdown.full && myParty && party && party.leader.id === currentUser._id && user._id !== currentUser._id && isMember(user._id)'>
+			<a ng-click='kick(user._id)'>Kick User</a>
+		</li>
+		<li class='clickable' ng-show='dropdown.full && myParty && party && party.leader.id === currentUser._id && user._id !== currentUser._id && isInvite(user._id)'>
+			<a ng-click='uninvite(user._id)'>Uninvite User</a>
+		</li>
+		<li class='clickable' ng-show='dropdown.full && myParty && party && party.leader.id === currentUser._id && user._id !== currentUser._id && isSuggestedInvite(user._id)'>
+			<a ng-click='inviteSuggestedUser(user._id)'>Invite User</a>
+		</li>
+		<li class='clickable' ng-show='dropdown.full && myParty && party && party.leader.id === currentUser._id && user._id !== currentUser._id && isSuggestedInvite(user._id)'>
+			<a ng-click='removeSuggestedUser(user._id)'>Uninvite User</a>
+		</li>
+		<li class='clickable' ng-show='dropdown.full && myParty && party && user._id === currentUser._id && isMember(user._id)'>
+			<a ng-click='leaveParty()'>Leave Party</a>
+		</li>
+	</ul>
+</div>

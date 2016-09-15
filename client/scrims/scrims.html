@@ -1,0 +1,357 @@
+<div class='panel panel-default'>
+	<div class='panel-heading BNTO' style='font-size:1.5em'>Find Scrim</div>
+	<div class='panel-body'>
+		<div ng-show='currentUser && (!party._id || (party._id && !party.scrim && party.leader.id === currentUser._id))'>
+			<div class='row unbox'>
+				<div class='BNTO' style='font-size:1.25em'>Maps:</div>
+				<div class='col-sm-2 col-xs-3 thumbnail clickable' ng-repeat='map in mapList' ng-click='map.selected = !map.selected' ng-style='map.selected ? {"background-color":"#5cb85c"} : ""'>
+					<image ng-src='{{map.imageUrl}}' class='img-responsive img-rounded' />
+					<div class='BNTO text-center' style='white-space:nowrap;overflow:hidden;text-overflow:ellipsis' ng-style='map.selected ? {"color":"white"} : ""'>{{map.name}}</div>
+				</div>
+			</div>
+			<div class='row unbox'>
+				<div class='col-sm-6 col-xs-12' style='padding:0px'>
+					<div class='BNTO' style='font-size:1.25em'>Regions:</div>
+					<div style='position:relative;display:inline-block'>
+						<image src='/images/world-map.png' class='img-responsive' style='width:100%' />
+						<span class='label BNT clickable region-label' style='font-weight:normal;font-size:1em;position:absolute' ng-style='{"left": region.position.left, "top": region.position.top}' ng-repeat='region in regionList' ng-click='region.selected = !region.selected' ng-class='region.selected ? "label-success" : "label-default"'>{{region.name}}</span>					
+					</div>
+				</div>
+				<div class='col-sm-6 col-xs-12' style='padding:0px'>
+					<div>
+						<div class='BNTO' style='font-size:1.25em'>Minimum Party Size:</div>
+						<uib-rating ng-model='minTeamSize' ng-init='minTeamSize = 1' class='no-focus clickable' readonly='false' ng-change='minTeamSize === 0 ? minTeamSize = 1 : ""' max='6' titles='["One player","Two players","Three players","Four players","Five players","Full team"]' state-on='"glyphicon-user"' state-off='"glyphicon-unchecked"'></uib-rating>
+						<span class='label label-success'>Minimum of {{minTeamSize}}/6 players</span>
+					</div>
+					<div style='margin-top:10px'>
+						<div class='BNTO' style='font-size:1.25em'>Message (Optional):</div>
+						<textarea class='form-control' placeholder='Enter message here (100 characters max)' rows='3' style='resize:none;font-size:0.9em' maxlength='100' ng-model='scrimMessage.text'></textarea>
+					</div>
+				</div>
+			</div>
+			<div class='clearfix visible-lg-block'></div>
+			<div class='row unbox'>
+				<div class='col-sm-offset-4 col-xs-offset-2 col-sm-4 col-xs-8' style='margin-top:10px'
+						uib-popover='{{findScrim.tooltipError}}'
+						popover-is-open='findScrim.tooltipDisplay'
+						popover-trigger='none'
+						popover-placement='top'>
+					<button class='btn btn-info btn-block BNTO skew no-focus' style='font-size:1.5em' ng-click='findScrims()'>
+						<span class='unskew'>Find Scrim</span>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div ng-show='currentUser && party._id && party.scrim'>
+			<div class='row unbox'>
+				<div class='BNTO' style='font-size:1.25em'>Maps:</div>
+				<div class='col-sm-2 col-xs-3 thumbnail' ng-repeat='map in scrim.maps' style='background-color:#5cb85c'>
+					<image ng-src='{{map.imageUrl}}' class='img-responsive img-rounded' />
+					<div class='BNTO text-center' style='white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:white'>{{map.name}}</div>
+				</div>
+			</div>
+			<div class='row unbox'>
+				<div class='col-sm-6 col-xs-12' style='padding:0px'>
+					<div class='BNTO' style='font-size:1.25em'>Regions:</div>
+					<div style='position:relative;display:inline-block'>
+						<image src='/images/world-map.png' class='img-responsive' style='width:100%' />
+						<span class='label BNT region-label label-success' style='font-weight:normal;font-size:1em;position:absolute' ng-style='{"left": region.position.left, "top": region.position.top}' ng-repeat='region in scrim.regions'>{{region.name}}</span>					
+					</div>
+				</div>
+				<div class='col-sm-6 col-xs-12' style='padding:0px'>
+					<div>
+						<div class='BNTO' style='font-size:1.25em'>Minimum Party Size:</div>
+						<uib-rating ng-model='scrim.minTeamSize' class='no-focus' readonly='true' max='6' titles='["One player","Two players","Three players","Four players","Five players","Full team"]' state-on='"glyphicon-user"' state-off='"glyphicon-unchecked"'></uib-rating>
+						<span class='label label-success'>Minimum of {{scrim.minTeamSize}}/6 players</span>
+					</div>
+					<div style='margin-top:10px' ng-show='scrim.message'>
+						<div class='BNTO' style='font-size:1.25em'>Message:</div>
+						{{scrim.message}}
+					</div>
+				</div>
+			</div>
+			<div class='clearfix visible-lg-block'></div>
+			<div class='row unbox'>
+				<div class='col-sm-offset-4 col-xs-offset-2 col-sm-4 col-xs-8' style='margin-top:10px'>
+					<button class='btn btn-warning btn-block BNTO skew no-focus' style='font-size:1.5em' ng-show='party.leader.id === currentUser._id' ng-click='cancelScrimSearch()'>
+						<span class='unskew'>Cancel Search</span>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div ng-show='currentUser && party._id && !party.scrim && party.leader.id !== currentUser._id'>
+			Your party leader is not currently searching for a scrim.
+		</div>
+		<div ng-show='!currentUser'>
+			If you want to find a scrim then please register and login.
+		</div>
+	</div>
+</div>
+<!-- <div class='panel panel-default'>
+	<div class='panel-heading BNTO' style='font-size:1.5em'>Invites</div>
+	<div class='panel-body'>
+		<div class='BNTO' style='font-size:1.25em'>Pending Invites</div>
+		<div class='row unbox'>
+			<div class='col-sm-4 col-xs-6 alert' ng-class='$index % 2 > 0 ? "alert-info" : "alert-warning"' style='padding:3px' ng-repeat='scrim in inviteeScrims' ng-show='scrim._leader'>
+				<div class='row unbox'>
+					<div class='col-xs-12 unbox'>
+						<div class='label BNT label-default label-pill pull-left' style='font-size:0.9em;font-weight:normal'>{{$index + 1}}</div>
+						<div style='overflow:hidden'>
+							<button class='btn btn-xs btn-info pull-right dropdown dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' ng-class='!scrim.scrim.message ? "invis" : ""'><span class='glyphicon glyphicon-comment'></span></button>
+							<div class='dropdown-menu dropdown-menu-right scrim-dropmenu' style='font-size:0.9em;width:100%'>
+								{{scrim.scrim.message}}
+							</div>
+							<div class='BNT text-center' style='font-size:1.2em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>{{scrim._leader.profile.battletag.name}}'s Party</div>
+						</div>
+					</div>
+				</div>
+				<div class='row unbox' style='margin-top:5px'>
+					<user-avatar class='col-xs-2' ng-repeat='member in scrim._members' user='member' party='scrim' style='margin-bottom:0px'></user-avatar>
+					<empty-avatar class='col-xs-2' ng-repeat='index in range(6-scrim.members.length) track by $index' style='margin-bottom:0px'></empty-avatar>
+				</div>
+				<div class='row BNT unbox' style='margin-top:5px'>
+					<div class='col-xs-6 text-center unbox'>
+						<div class='dropup' style='margin-right:2px'>
+							<button class='btn btn-xs btn-block btn-info dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-size:1em'>
+								Maps <span class='caret'></span>
+							</button>
+							<ul class='dropdown-menu scrim-dropmenu'>
+								<li ng-repeat='map in scrim.scrim.maps' style='white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>{{map}}</li>
+							</ul>
+						</div>
+					</div>
+					<div class='col-xs-6 text-center unbox'>
+						<div class='dropup' style='margin-left:2px'>
+							<button class='btn btn-xs btn-block btn-info dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-size:1em'>
+								Regions <span class='caret'></span>
+							</button>
+							<ul class='col-xs-6 dropdown-menu dropdown-menu-right scrim-dropmenu'>
+								<li ng-repeat='region in scrim.scrim.regions'>{{region}}</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class='row' style='margin-top:5px'>
+					<div class='col-xs-12 text-center BNT'>
+						<span class='font-size:1.1em'>Search time: {{getDate(scrim.scrim.dateCreated)}}</span>
+					</div>
+				</div>
+				<div class='row' style='margin-top:5px'>
+					<div class='col-xs-12 text-center BNT'>
+						<uib-rating ng-model='scrim.scrim.minTeamSize' class='no-focus' readonly='true' max='6' titles='["One player","Two players","Three players","Four players","Five players","Full team"]' state-on='"glyphicon-user"' state-off='"glyphicon-unchecked"'></uib-rating>
+					</div>
+				</div>
+				<div class='row' style='margin-top:5px'>
+					<div class='col-xs-12 text-center BNT'>
+						<button class='btn btn-sm btn-success skew BNT' style='font-size:1.1em' ng-show='party.scrim && party.leader.id == currentUser._id' ng-click='removeScrimChallenge(scrim._id)'><span class='unskew'>Accept</span></button>
+						<button class='btn btn-sm btn-danger skew BNT' style='font-size:1.1em' ng-show='party.scrim && party.leader.id == currentUser._id' ng-click='removeScrimChallenge(scrim._id)'><span class='unskew'>Decline</span></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class='BNTO' style='font-size:1.25em'>Sent Invites</div>
+		<div class='row unbox'>
+			<div class='col-sm-4 col-xs-6 alert' ng-class='$index % 2 > 0 ? "alert-info" : "alert-warning"' style='padding:3px' ng-repeat='scrim in invitedScrims' ng-show='scrim._leader'>
+				<div class='row unbox'>
+					<div class='col-xs-12 unbox'>
+						<div class='label BNT label-default label-pill pull-left' style='font-size:0.9em;font-weight:normal'>{{$index + 1}}</div>
+						<div style='overflow:hidden'>
+							<button class='btn btn-xs btn-info pull-right dropdown dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' ng-class='!scrim.scrim.message ? "invis" : ""'><span class='glyphicon glyphicon-comment'></span></button>
+							<div class='dropdown-menu dropdown-menu-right scrim-dropmenu' style='font-size:0.9em;width:100%'>
+								{{scrim.scrim.message}}
+							</div>
+							<div class='BNT text-center' style='font-size:1.2em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>{{scrim._leader.profile.battletag.name}}'s Party</div>
+						</div>
+					</div>
+				</div>
+				<div class='row unbox' style='margin-top:5px'>
+					<user-avatar class='col-xs-2' ng-repeat='member in scrim._members' user='member' party='scrim' style='margin-bottom:0px'></user-avatar>
+					<empty-avatar class='col-xs-2' ng-repeat='index in range(6-scrim.members.length) track by $index' style='margin-bottom:0px'></empty-avatar>
+				</div>
+				<div class='row BNT unbox' style='margin-top:5px'>
+					<div class='col-xs-6 text-center unbox'>
+						<div class='dropup' style='margin-right:2px'>
+							<button class='btn btn-xs btn-block btn-info dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-size:1em'>
+								Maps <span class='caret'></span>
+							</button>
+							<ul class='dropdown-menu scrim-dropmenu'>
+								<li ng-repeat='map in scrim.scrim.maps' style='white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>{{map}}</li>
+							</ul>
+						</div>
+					</div>
+					<div class='col-xs-6 text-center unbox'>
+						<div class='dropup' style='margin-left:2px'>
+							<button class='btn btn-xs btn-block btn-info dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-size:1em'>
+								Regions <span class='caret'></span>
+							</button>
+							<ul class='col-xs-6 dropdown-menu dropdown-menu-right scrim-dropmenu'>
+								<li ng-repeat='region in scrim.scrim.regions'>{{region}}</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class='row' style='margin-top:5px'>
+					<div class='col-xs-12 text-center BNT'>
+						<span class='font-size:1.1em'>Search time: {{getDate(scrim.scrim.dateCreated)}}</span>
+					</div>
+				</div>
+				<div class='row' style='margin-top:5px'>
+					<div class='col-xs-12 text-center BNT'>
+						<uib-rating ng-model='scrim.scrim.minTeamSize' class='no-focus' readonly='true' max='6' titles='["One player","Two players","Three players","Four players","Five players","Full team"]' state-on='"glyphicon-user"' state-off='"glyphicon-unchecked"'></uib-rating>
+					</div>
+				</div>
+				<div class='row' style='margin-top:5px'>
+					<div class='col-xs-12 text-center BNT'>
+						<button class='btn btn-sm btn-danger skew BNT' style='font-size:1.1em' ng-show='party.scrim && party.leader.id == currentUser._id' ng-click='removeScrimChallenge(scrim._id)'><span class='unskew'>Withdraw</span></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> -->
+<div class='panel panel-default' ng-show='party.scrim'>
+	<div class='panel-heading BNTO' style='font-size:1.5em'>Suggested Scrims ({{suggestedScrimsCount}})</div>
+	<div class='panel-body'>
+		<div class='row' ng-hide='suggestedScrims.length > 0'>
+			<div class='col-xs-12'>
+				There are currently no scrims that meet your search criteria.
+			</div>
+		</div>
+		<div ng-show='suggestedScrims.length > 0'>
+			<div class='row unbox'>
+				<div class='col-sm-4 col-xs-6 alert' ng-class='$index % 2 > 0 ? "alert-info" : "alert-warning"' style='padding:3px' ng-repeat='scrim in suggestedScrims' ng-show='scrim._leader'>
+					<div class='row unbox'>
+						<div class='col-xs-12 unbox'>
+							<div class='label BNT label-default label-pill pull-left' style='font-size:0.9em;font-weight:normal'>{{suggestedScrimsOptions.skip + $index + 1}}</div>
+							<div style='overflow:hidden'>
+								<button class='btn btn-xs btn-info pull-right dropdown dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' ng-class='!scrim.scrim.message ? "invis" : ""'><span class='glyphicon glyphicon-comment'></span></button>
+								<div class='dropdown-menu dropdown-menu-right scrim-dropmenu' style='font-size:0.9em;width:100%'>
+									{{scrim.scrim.message}}
+								</div>
+								<div class='BNT text-center' style='font-size:1.2em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>{{scrim._leader.profile.battletag.name}}'s Party</div>
+							</div>
+						</div>
+					</div>
+					<div class='row unbox' style='margin-top:5px'>
+						<user-avatar class='col-xs-2' ng-repeat='member in scrim._members' user='member' party='scrim' style='margin-bottom:0px'></user-avatar>
+						<empty-avatar class='col-xs-2' ng-repeat='index in range(6-scrim.members.length) track by $index' style='margin-bottom:0px'></empty-avatar>
+					</div>
+					<div class='row BNT unbox' style='margin-top:5px'>
+						<div class='col-xs-6 text-center unbox'>
+							<div class='dropup' style='margin-right:2px'>
+								<button class='btn btn-xs btn-block btn-info dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-size:1em'>
+									Maps <span class='caret'></span>
+								</button>
+								<ul class='dropdown-menu scrim-dropmenu'>
+									<li ng-repeat='map in scrim.scrim.maps' style='white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>{{map}}</li>
+								</ul>
+							</div>
+						</div>
+						<div class='col-xs-6 text-center unbox'>
+							<div class='dropup' style='margin-left:2px'>
+								<button class='btn btn-xs btn-block btn-info dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-size:1em'>
+									Regions <span class='caret'></span>
+								</button>
+								<ul class='col-xs-6 dropdown-menu dropdown-menu-right scrim-dropmenu'>
+									<li ng-repeat='region in scrim.scrim.regions'>{{region}}</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class='row' style='margin-top:5px'>
+						<div class='col-xs-12 text-center BNT'>
+							<span class='font-size:1.1em'>Search time: {{getDate(scrim.scrim.dateCreated)}}</span>
+						</div>
+					</div>
+					<div class='row' style='margin-top:5px'>
+						<div class='col-xs-12 text-center BNT'>
+							<uib-rating ng-model='scrim.scrim.minTeamSize' class='no-focus' readonly='true' max='6' titles='["One player","Two players","Three players","Four players","Five players","Full team"]' state-on='"glyphicon-user"' state-off='"glyphicon-unchecked"'></uib-rating>
+						</div>
+					</div>
+					<div class='row' style='margin-top:5px'>
+						<div class='col-xs-12 text-center BNT'>
+							<button class='btn btn-sm btn-success skew BNT' style='font-size:1.1em' ng-show='party.scrim && party.leader.id == currentUser._id && !isInScrimInvites(scrim._id) && !isInScrimInvitees(scrim._id)' ng-click='sendScrimChallenge(scrim._id)'><span class='unskew'>Challenge</span></button>
+							<button class='btn btn-sm btn-danger skew BNT' style='font-size:1.1em' ng-show='party.scrim && party.leader.id == currentUser._id && isInScrimInvites(scrim._id)' ng-click='removeScrimChallenge(scrim._id)'><span class='unskew'>Withdraw</span></button>
+							<button class='btn btn-sm btn-success skew BNT' style='font-size:1.1em' ng-show='party.scrim && party.leader.id == currentUser._id && isInScrimInvitees(scrim._id)' ng-click='removeScrimChallenge(scrim._id)'><span class='unskew'>Accept</span></button>
+							<button class='btn btn-sm btn-danger skew BNT' style='font-size:1.1em' ng-show='party.scrim && party.leader.id == currentUser._id && isInScrimInvitees(scrim._id)' ng-click='removeScrimChallenge(scrim._id)'><span class='unskew'>Decline</span></button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='row unbox'>
+				<div class='col-xs-12'>
+					<center><uib-pagination total-items='suggestedScrimsCount' items-per-page='suggestedScrimsList.perPage' ng-model='suggestedScrimsListPage' ng-change='setSuggestedScrimsPageNumber(suggestedScrimsListPage)' previous-text='&lsaquo;' next-text='&rsaquo;' class='skew unbox' style='font-weight:bold'></uib-pagination></center>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class='panel panel-default'>
+	<div class='panel-heading BNTO' style='font-size:1.5em'>All Scrims ({{scrimsCount}})</div>
+	<div class='panel-body' ng-show='!viewScrim'>
+		<div class='row' ng-hide='scrims.length > 0'>
+			<div class='col-xs-12'>
+				There are currently no scrims that are listed.
+			</div>
+		</div>
+		<div ng-show='scrims.length > 0'>
+			<div class='row unbox'>
+				<div class='col-sm-4 col-xs-6 alert' ng-class='$index % 2 > 0 ? "alert-info" : "alert-warning"' style='padding:3px' ng-repeat='scrim in scrims track by $index' ng-show='scrim._leader'> <!-- ng-cloak ?? -->
+					<div class='row unbox'>
+						<div class='col-xs-12 unbox'>
+							<div class='label BNT label-default label-pill pull-left' style='font-size:0.9em;font-weight:normal'>{{scrimsOptions.skip + $index + 1}}</div>
+							<div style='overflow:hidden'>
+								<button class='btn btn-xs btn-info pull-right dropdown dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' ng-class='!scrim.scrim.message ? "invis" : ""'><span class='glyphicon glyphicon-comment'></span></button>
+								<div class='dropdown-menu dropdown-menu-right scrim-dropmenu' style='font-size:0.9em;width:100%'>
+									{{scrim.scrim.message}}
+								</div>
+								<div class='BNT text-center' style='font-size:1.2em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>{{scrim._leader.profile.battletag.name}}'s Party</div>
+							</div>
+						</div>
+					</div>
+					<div class='row unbox' style='margin-top:5px'>
+						<user-avatar class='col-xs-2' ng-repeat='member in scrim._members' user='member' party='scrim' style='margin-bottom:0px'></user-avatar>
+						<empty-avatar class='col-xs-2' ng-repeat='index in range(6-scrim.members.length) track by $index' style='margin-bottom:0px'></empty-avatar>
+					</div>
+					<div class='row BNT unbox' style='margin-top:5px'>
+						<div class='col-xs-6 text-center unbox'>
+							<div class='dropup' style='margin-right:2px'>
+								<button class='btn btn-xs btn-block btn-info dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-size:1em'>
+									Maps <span class='caret'></span>
+								</button>
+								<ul class='dropdown-menu scrim-dropmenu'>
+									<li ng-repeat='map in scrim.scrim.maps' style='white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>{{map}}</li>
+								</ul>
+							</div>
+						</div>
+						<div class='col-xs-6 text-center unbox'>
+							<div class='dropup' style='margin-left:2px'>
+								<button class='btn btn-xs btn-block btn-info dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-size:1em'>
+									Regions <span class='caret'></span>
+								</button>
+								<ul class='col-xs-6 dropdown-menu dropdown-menu-right scrim-dropmenu'>
+									<li ng-repeat='region in scrim.scrim.regions'>{{region}}</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class='row' style='margin-top:5px'>
+						<div class='col-xs-12 text-center BNT'>
+							<span class='font-size:1.1em'>Search time: {{getDate(scrim.scrim.dateCreated)}}</span>
+						</div>
+					</div>
+					<div class='row' style='margin-top:5px'>
+						<div class='col-xs-12 text-center BNT'>
+							<uib-rating ng-model='scrim.scrim.minTeamSize' class='no-focus' readonly='true' max='6' titles='["One player","Two players","Three players","Four players","Five players","Full team"]' state-on='"glyphicon-user"' state-off='"glyphicon-unchecked"'></uib-rating>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='row unbox'>
+				<div class='col-xs-12'>
+					<center><uib-pagination total-items='scrimsCount' items-per-page='scrimsList.perPage' ng-model='scrimsListPage' ng-change='setScrimsPageNumber(scrimsListPage)' previous-text='&lsaquo;' next-text='&rsaquo;' class='skew unbox' style='font-weight:bold'></uib-pagination></center>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

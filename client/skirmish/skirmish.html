@@ -1,0 +1,25 @@
+<div class='row'>
+	<div class='col-md-4'>
+		<div class='panel panel-default'>
+			<a ui-sref='skirmish' class='panel-heading BNTO clickable link-unstyled' style='display:block;font-size:1.5em'>Skirmish</a>
+			<div class='list-group BNT' style='font-size:1.25em'>
+				<a ui-sref='.groups' class='list-group-item' ng-class='$state.current.name === "skirmish.groups" ? "active" : ""' ng-style='$state.current.name === "skirmish.groups" ? {"background-color":"#5cb85c", "border-color":"#5cb85c"} : ""'>Looking for Group <span class='pull-right glyphicon glyphicon-menu-right'></span></a>
+				<a ui-sref='.players' class='list-group-item' ng-class='$state.current.name === "skirmish.players" ? "active" : ""' ng-style='$state.current.name === "skirmish.players" ? {"background-color":"#5cb85c", "border-color":"#5cb85c"} : ""'>Looking for Player <span class='pull-right glyphicon glyphicon-menu-right'></span></a>
+				<a ui-sref='.scrims' class='list-group-item' ng-class='$state.current.name === "skirmish.scrims" ? "active" : ""' ng-style='$state.current.name === "skirmish.scrims" ? {"background-color":"#5cb85c", "border-color":"#5cb85c"} : ""'>Looking for Scrim <span class='pull-right glyphicon glyphicon-menu-right'></span></a>
+			</div>
+		</div>
+		<party ng-show='currentUser'></party>
+	</div>
+	<div class='col-md-8' ui-view=''>
+		<div class='panel panel-default'>
+			<div class='panel-heading BNTO' style='font-size:1.5em'>Skirmish</div>
+			<div class='panel-body'>
+				<div class='BNTO' style='font-size:1.25em'>Welcome to Overmatch Skirmish</div>
+				<br>
+				<span ng-show='!currentUser'>Once you have registered an account and logged in </span><span ng-show='currentUser'>From here </span>you can use our search tools to find groups, players or scrims.
+				<br><br>
+				Use the party panel to form your group, whether it be for pub play or scrims.
+			</div>
+		</div>
+	</div>
+</div>
