@@ -1,6 +1,8 @@
 # Overmatch
 
-MeteorJS project to create a live scrim search for the game Overwatch. Users can create accounts, login, add users to party and search for scrims based. Parties that meet the search requirements will appear and can be invited to scrim.
+MeteorJS project to create a live scrim search for the game Overwatch. Developed using MeteorJS (MongoDB), AngularJS and Bootstrap.
+
+Users can create accounts, login, add users to party and search for scrims based. Parties that meet the search requirements will appear and can be invited to scrim.
 
 ## Party creation
 
